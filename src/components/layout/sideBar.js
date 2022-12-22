@@ -26,13 +26,11 @@ function SideBar() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // eslint-disable-next-line
     const [expand, setExpand] = useState(false);
 
     function handleClick({ key }) {
         navigate(key);
     }
-    console.log(location.pathname)
     return (
         <div className={`flex flex-col items-center justify-between bg-[#001529] text-[#fff] min-h-screen ${expand ? 'w-auto' : 'w-[256px]'}`}>
             <div>

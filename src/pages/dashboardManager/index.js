@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Layout } from 'antd';
-import { LineChartOutlined } from '@ant-design/icons';
+import { LineChartOutlined, BarChartOutlined  } from '@ant-design/icons';
 import { useNavigate, useLocation , Outlet, useOutlet } from "react-router-dom";
 import SubCriptionChart from '../../components/dashboardManager/subCriptionChart'
 const { Content } = Layout;
@@ -19,7 +19,7 @@ function Dashboard() {
             Subcription
           </Button>
 
-          <Button type={ location.pathname.includes("/evenue") && "primary" } onClick={() => handleClick("evenue")} icon={<LineChartOutlined />}>
+          <Button type={ location.pathname.includes("/evenue") && "primary" } onClick={() => handleClick("evenue")} icon={<BarChartOutlined />}>
             Revenue
           </Button>
         </div>

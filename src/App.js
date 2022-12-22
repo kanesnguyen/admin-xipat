@@ -10,7 +10,7 @@ function App(props) {
   const { ...rest } = props;
   return (
     <div {...rest}>
-      <Layout className="flex sm:flex-row flex-col sm:gap-0 bg-[red]">
+      <Layout className="flex sm:flex-row flex-col sm:gap-0 ">
         <SideBar />
         <Layout>
           <Content className="bg-white p-8 m-0 h-screen overflow-y-auto">
