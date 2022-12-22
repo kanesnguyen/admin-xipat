@@ -1,21 +1,70 @@
 import React, { useState } from 'react'
-import { FundViewOutlined } from '@ant-design/icons';
+import { useNavigate, useLocation } from "react-router-dom";
+
+import {
+    SettingOutlined,
+    DesktopOutlined,
+    PieChartOutlined,
+    LeftOutlined
+} from '@ant-design/icons';
+import { Menu, Button } from 'antd';
+function getItem(label, key, icon, children, type) {
+    return {
+        key,
+        icon,
+        children,
+        label,
+        type,
+    };
+}
+const items = [
+    getItem('Dashboard', '/dashboard', <PieChartOutlined />),
+    getItem('Posts Manager', '/posts-manager', <DesktopOutlined />),
+    getItem('Setting', '/setting', <SettingOutlined />),
+];
 function SideBar() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     // eslint-disable-next-line
-    const [expand, setExpand] = useState(true);
+    const [expand, setExpand] = useState(false);
+
+    function handleClick({ key }) {
+        navigate(key);
+    }
+    console.log(location.pathname)
     return (
-    <div className={`bg-[#1b2130] text-[#fff] min-h-screen ${expand ? 'w-[260px]' : 'w-auto'}`}>
-        <div className={expand ? 'd-block' : 'd-none' }>
-            <img src="./images/logo.png" alt="/" className={'mx-auto block mt-10'}/>
-        </div>
-        <div className='flex flex-col gap-5 text-xl items-center pt-8'>
-            <div className={`flex items-center gap-3 justify-start w-4/5 px-4 py-1 bg-[#007aff] rounded-md `}>
-                <FundViewOutlined />
-                <p>Dashboard</p>
+        <div className={`flex flex-col items-center justify-between bg-[#001529] text-[#fff] min-h-screen ${expand ? 'w-auto' : 'w-[256px]'}`}>
+            <div>
+                <div className={expand ? 'd-none' : 'd-block'}>
+                    <img src="/images/logo.png" alt="/" className={'mx-auto block mt-10'} />
+                </div>
+                <div className='flex flex-col gap-5 text-xl items-center pt-8'>
+                    <div
+                        style={{
+                            width: expand ? 'auto' : 256,
+                        }}
+                    >
+                        <Menu
+                            defaultSelectedKeys={[`/${location.pathname.split('/')[1]}`]}
+                            mode="inline"
+                            theme="dark"
+                            inlineCollapsed={expand}
+                            items={items}
+                            onClick={handleClick}
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="w-full p-3">
+                <Button onClick={() => setExpand(!expand)} type="primary" className="w-full" icon={<LeftOutlined />}>
+                    {
+                        expand || 'Collapse Sidebar'
+                    }
+                </Button>
             </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default SideBar
