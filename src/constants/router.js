@@ -9,6 +9,12 @@ import { Route, Routes }  from 'react-router-dom';
 
 
 export default function Router () {
+    const settingDefaults = {
+        title: '',
+        email: '',
+        background: '',
+        activeDate: [],
+    }
     return (
         <Routes>
             <Route path="/" element={<App />}>
@@ -17,7 +23,7 @@ export default function Router () {
                     <Route path="evenue" element={<RevenueChart />} />
                 </Route>
                 <Route path="posts-manager" element={<PostsManager />} />
-                <Route path="setting" element={<SettingsManager />} />
+                <Route path="setting" element={<SettingsManager settingDefaults={settingDefaults} />} />
             </Route>
         </Routes>
     );
