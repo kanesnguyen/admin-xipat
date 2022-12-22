@@ -14,6 +14,9 @@ function TableManager({ data }) {
             .then(response => setDialog({ post: response.data, open: true }))
             .catch(err => console.log(err))
         }
+        else {
+            setDialog({ ...dialog, open: true })
+        }
     }
     const columns = [
         {
