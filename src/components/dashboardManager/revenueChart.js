@@ -45,6 +45,12 @@ function RevenueChart() {
                     },
                     labels: {
                         display: false,
+                    },
+                    ticks: {
+                        // Include a dollar sign in the ticks
+                        callback: function(value, index, ticks) {
+                            return '$ ' + value/1000;
+                        }
                     }
                 },
                 xAxes: {
@@ -63,8 +69,8 @@ function RevenueChart() {
         },
     };
     return (
-        <div className="chart relative bg-[#f6f6f6] rounded-md py-6 pr-6 pl-0 box-border h-[50vh] ">
-            <h3 className="absolute top-0 left-[55px]">REVENUE ANALYSTIC</h3>
+        <div className="chart relative bg-[#f6f6f6] rounded-md py-6 pb-12 md:py-6 pr-6 pl-0 box-border h-[50vh] ">
+            <h3 className="md:absolute top-[13px] left-[55px] my-0 text-center ml-6 md:\ml-0">REVENUE ANALYSTIC</h3>
             <Bar data={data} options={data.options} />
         </div>
     )

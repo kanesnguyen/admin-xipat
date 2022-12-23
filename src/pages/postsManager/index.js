@@ -22,9 +22,7 @@ function PostsManager() {
           placeholder="Search by User ID or Title"
           allowClear
           onSearch={onSearch}
-          style={{
-            width: 200,
-          }}
+          className='w-full md:w-[200px]'
         />
       </div>
       <Table data={data} />

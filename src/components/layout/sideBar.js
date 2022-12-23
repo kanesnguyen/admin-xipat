@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from "react-router-dom";
 
 import {
     SettingOutlined,
     DesktopOutlined,
     PieChartOutlined,
-    LeftOutlined
+    LeftOutlined,
+    RightOutlined
 } from '@ant-design/icons';
 import { Menu, Button } from 'antd';
 function getItem(label, key, icon, children, type) {
@@ -22,7 +23,7 @@ const items = [
     getItem('Posts Manager', '/posts-manager', <DesktopOutlined />),
     getItem('Setting', '/setting', <SettingOutlined />),
 ];
-function SideBar() {
+function SideBar(inDraw) {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -31,10 +32,18 @@ function SideBar() {
     function handleClick({ key }) {
         navigate(key);
     }
+    useEffect(() => {
+        if(inDraw) {
+            setExpand(false)
+        }
+        else {
+            setExpand(window.innerWidth <= 768)
+        }
+    }, [inDraw])
     return (
-        <div className={`flex flex-col items-center justify-between bg-[#001529] text-[#fff] min-h-screen ${expand ? 'w-auto' : 'w-[256px]'}`}>
+        <div className={`flex flex-col items-center justify-between bg-[#001529] text-[#fff] min-h-screen ${expand ? 'w-auto' : 'md:w-[256px]'}`}>
             <div>
-                <div className={expand ? 'd-none' : 'd-block'}>
+                <div className={expand ? 'hidden' : 'hidden md:block'}>
                     <img src="/images/logo.png" alt="/" className={'mx-auto block mt-10'} />
                 </div>
                 <div className='flex flex-col gap-5 text-xl items-center pt-8'>
@@ -54,13 +63,13 @@ function SideBar() {
                     </div>
                 </div>
             </div>
-            <div className="w-full p-3">
-                <Button onClick={() => setExpand(!expand)} type="primary" className="w-full" icon={<LeftOutlined />}>
-                    {
-                        expand || 'Collapse Sidebar'
-                    }
-                </Button>
-            </div>
+            <div className="w-full p-3 hidden md:block">
+                    <Button onClick={() => setExpand(!expand)} type="primary" className="w-full" icon={!expand ? <LeftOutlined /> : <RightOutlined />}>
+                        {
+                            expand || 'Collapse Sidebar'
+                        }
+                    </Button>
+                </div>
         </div>
     )
 }

@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { Input, Form, Button, message, DatePicker } from 'antd';
 import moment from 'moment';
 import { RgbaColorPicker } from "react-colorful";
 import { cleanInputColor } from "../../extensions/cleanInputColor"
+const layout = {
+  labelCol: {
+    span: 5,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
 function SettingsManager({ settingDefaults }) {
 
   const [form] = Form.useForm();
@@ -18,10 +26,12 @@ function SettingsManager({ settingDefaults }) {
     setColor(value);
   }
   const handleFormChange = () => {
-    if ((form.getFieldValue("title") !== settingDefaults.title 
-    || form.getFieldValue("email") !== settingDefaults.email 
-    || form.getFieldValue("activeDate") !== settingDefaults.activeDate) && form.getFieldValue("title")!== '' && form.getFieldValue("title") !== 'email' && form.getFieldValue("activeDate") !== []) {
+    if (form.getFieldValue("title") && form.getFieldValue("email") && form.getFieldValue("activeDate")?.length > 0) {
+      if (form.getFieldValue("title") !== settingDefaults.title 
+      || form.getFieldValue("email") !== settingDefaults.email 
+      || form.getFieldValue("activeDate") !== settingDefaults.activeDate) {
         setDisableButton(false);
+      }
     }
     else {
       setDisableButton(true);
@@ -35,9 +45,9 @@ function SettingsManager({ settingDefaults }) {
     },
   };
   return (
-    <div className="grid grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Form
-        layout={'horizontal'}
+        {...layout}
         form={form}
         onFinish={onFinish}
         onFieldsChange={handleFormChange}
@@ -67,6 +77,7 @@ function SettingsManager({ settingDefaults }) {
         <Form.Item label="Active Date" name="activeDate">
 
           <DatePicker.RangePicker
+            className="w-full"
             dateRender={(current) => {
               const style = {};
               if (current.date() === 1) {
@@ -84,7 +95,7 @@ function SettingsManager({ settingDefaults }) {
           />
         </Form.Item>
         <Form.Item>
-          <Button className="mt-6" type="primary" htmlType="submit" disabled={disabelButton}>Submit</Button>
+          <Button className="mt-6 ml-5" type="primary" htmlType="submit" disabled={disabelButton}>Submit</Button>
         </Form.Item>
       </Form>
     </div>
