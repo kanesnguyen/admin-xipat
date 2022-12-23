@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 import { Input, Form, Button, message, DatePicker } from 'antd';
 import moment from 'moment';
 import { RgbaColorPicker } from "react-colorful";
@@ -17,6 +17,15 @@ function SettingsManager({ settingDefaults }) {
   const [color, setColor] = useState({ r: 22, g: 119, b: 255, a: 1 });
   const [disabelButton, setDisableButton] = useState(true)
   const [openSketchPicker, setOpenSketchPicker] = useState(false);
+
+  /* eslint-disable no-template-curly-in-string */
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+    },
+  };
+
   const onFinish = (values) => {
     console.log({ ...values, background: cleanInputColor(color), activeDate: values.activeDate.map(e => moment(e.$d).format("DD/MM/YYYY")) })
     message.success('Update success!');
@@ -26,10 +35,11 @@ function SettingsManager({ settingDefaults }) {
     setColor(value);
   }
   const handleFormChange = () => {
-    if (form.getFieldValue("title") && form.getFieldValue("email") && form.getFieldValue("activeDate")?.length > 0) {
-      if (form.getFieldValue("title") !== settingDefaults.title 
-      || form.getFieldValue("email") !== settingDefaults.email 
-      || form.getFieldValue("activeDate") !== settingDefaults.activeDate) {
+    // eslint-disable-next-line
+    if (form.getFieldValue("title") && (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.getFieldValue("email"))) && form.getFieldValue("activeDate")?.length > 0) {
+      if (form.getFieldValue("title") !== settingDefaults.title
+        || form.getFieldValue("email") !== settingDefaults.email
+        || form.getFieldValue("activeDate") !== settingDefaults.activeDate) {
         setDisableButton(false);
       }
     }
@@ -37,13 +47,14 @@ function SettingsManager({ settingDefaults }) {
       setDisableButton(true);
     }
   }
-  /* eslint-disable no-template-curly-in-string */
-  const validateMessages = {
-    required: '${label} is required!',
-    types: {
-      email: '${label} is not a valid email!',
-    },
-  };
+
+  const concernedElement = document.querySelector(".box-color");
+  document.addEventListener("mousedown", (event) => {
+    if (!concernedElement.contains(event.target)) {
+      setOpenSketchPicker(false);
+    }
+  });
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Form
@@ -63,16 +74,18 @@ function SettingsManager({ settingDefaults }) {
         ]}>
           <Input placeholder="Email" />
         </Form.Item>
+        <div className="box-color">
         <Form.Item label="Background">
           <Input className='mb-0' placeholder="Background" defaultValue={cleanInputColor(color)} value={cleanInputColor(color)} onChange={e => handleChangeInput(e.target.value)} />
           <Button type="primary" onClick={() => setOpenSketchPicker({ ...openSketchPicker, open: !openSketchPicker.open })} style={{ backgroundColor: cleanInputColor(color) }} className={`absolute right-0`}></Button>
         </Form.Item>
         {
           openSketchPicker.open &&
-          <div className="flex justify-end mb-4 box-color-select">
+          <div className="flex justify-end mb-4 box-color-select" id="cobra">
             <RgbaColorPicker color={color} onChange={setColor} />
           </div>
         }
+        </div>
 
         <Form.Item label="Active Date" name="activeDate">
 
@@ -80,10 +93,6 @@ function SettingsManager({ settingDefaults }) {
             className="w-full"
             dateRender={(current) => {
               const style = {};
-              if (current.date() === 1) {
-                style.border = '1px solid #1890ff';
-                style.borderRadius = '50%';
-              }
               return (
                 <div className="ant-picker-cell-inner" style={style}>
                   {current.date()}
